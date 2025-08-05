@@ -8,34 +8,35 @@ const slides = [
   {
     icon: <ScreenshotIcon className="w-20 h-20 text-indigo-400" />,
     title: "Analyze Any Screenshot",
-    description: "Upload a screenshot from any game. Otakon instantly identifies the game, your location, and what's happening in the scene."
+    description:
+      "Upload a screenshot from any game. Otakon instantly identifies the game, your location, and what's happening in the scene.",
   },
   {
     icon: <HintIcon className="w-20 h-20 text-indigo-400" />,
     title: "Spoiler-Free Hints & Lore",
-    description: "Stuck? Get contextual guidance without ruining the story. Discover rich lore about characters, items, and the world around you."
+    description:
+      "Stuck? Get contextual guidance without ruining the story. Discover rich lore about characters, items, and the world around you.",
   },
   {
     icon: <DesktopIcon className="w-20 h-20 text-indigo-400" />,
     title: "Seamless PC Connection",
-    description: "Sync with the Otakon desktop app. Press a hotkey to instantly send a screenshot for analysis without ever leaving your game."
-  }
+    description:
+      "Sync with the Otakon desktop app. Press a hotkey to instantly send a screenshot for analysis without ever leaving your game.",
+  },
 ];
 
 interface SplashScreenProps {
   onComplete: () => void;
   onConnect: (code: string) => void;
-  onDisconnect: () => void; // ✅ this is required
   status: ConnectionStatus;
   error: string | null;
 }
 
-const SplashScreen: React.FC<SplashScreenProps> = ({ 
+const SplashScreen: React.FC<SplashScreenProps> = ({
   onComplete,
   onConnect,
-  onDisconnect, // ✅ added to destructure
   status,
-  error
+  error,
 }) => {
   const [step, setStep] = useState(0);
   const [code, setCode] = useState('');
@@ -47,7 +48,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
 
   const handleNext = () => {
     if (!isLastStep) {
-      setStep(s => s + 1);
+      setStep((s) => s + 1);
     }
   };
 
@@ -63,7 +64,12 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
   return (
     <div className="h-screen bg-slate-950 text-white flex flex-col font-inter">
       <div className="flex-shrink-0 px-6 pt-8 flex justify-end">
-        <button onClick={handleSkip} className="text-slate-400 hover:text-white transition-colors text-sm font-medium">Skip Intro</button>
+        <button
+          onClick={handleSkip}
+          className="text-slate-400 hover:text-white transition-colors text-sm font-medium"
+        >
+          Skip Intro
+        </button>
       </div>
 
       <main className="flex-1 flex flex-col items-center justify-center overflow-y-auto p-6">
@@ -71,13 +77,29 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
           <div className="mb-8 flex justify-center items-center h-20 animate-fade-in">
             {currentSlide.icon}
           </div>
-          <h1 className="text-3xl font-bold text-white mb-4 animate-fade-in" style={{ animationDelay: '100ms' }}>{currentSlide.title}</h1>
-          <p className="text-slate-300 text-lg mb-8 animate-fade-in" style={{ animationDelay: '200ms' }}>{currentSlide.description}</p>
+          <h1
+            className="text-3xl font-bold text-white mb-4 animate-fade-in"
+            style={{ animationDelay: '100ms' }}
+          >
+            {currentSlide.title}
+          </h1>
+          <p
+            className="text-slate-300 text-lg mb-8 animate-fade-in"
+            style={{ animationDelay: '200ms' }}
+          >
+            {currentSlide.description}
+          </p>
 
           {isLastStep && (
-            <div className="space-y-4 text-left animate-fade-in" style={{ animationDelay: '300ms' }}>
+            <div
+              className="space-y-4 text-left animate-fade-in"
+              style={{ animationDelay: '300ms' }}
+            >
               <div>
-                <label htmlFor="connection-code" className="block text-sm font-medium text-slate-300 mb-1">
+                <label
+                  htmlFor="connection-code"
+                  className="block text-sm font-medium text-slate-300 mb-1"
+                >
                   4-Digit Connection Code
                 </label>
                 <input
@@ -95,9 +117,19 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
                 />
               </div>
               <div className="h-5 text-center text-sm">
-                {error && <p className="text-red-400 animate-fade-in">{error}</p>}
-                {isConnected && <p className="text-green-400 animate-fade-in">Connected successfully. Ready for action!</p>}
-                {isConnecting && <p className="text-slate-400 animate-fade-in">Attempting to connect...</p>}
+                {error && (
+                  <p className="text-red-400 animate-fade-in">{error}</p>
+                )}
+                {isConnected && (
+                  <p className="text-green-400 animate-fade-in">
+                    Connected successfully. Ready for action!
+                  </p>
+                )}
+                {isConnecting && (
+                  <p className="text-slate-400 animate-fade-in">
+                    Attempting to connect...
+                  </p>
+                )}
               </div>
             </div>
           )}
@@ -108,7 +140,12 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
         <div className="w-full max-w-md mx-auto">
           <div className="flex justify-center items-center mb-6 gap-2">
             {slides.map((_, index) => (
-              <div key={index} className={`w-2.5 h-2.5 rounded-full transition-all ${step === index ? 'bg-indigo-400 scale-125' : 'bg-slate-700'}`}></div>
+              <div
+                key={index}
+                className={`w-2.5 h-2.5 rounded-full transition-all ${
+                  step === index ? 'bg-indigo-400 scale-125' : 'bg-slate-700'
+                }`}
+              ></div>
             ))}
           </div>
 
@@ -134,7 +171,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
                 onClick={onComplete}
                 className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-full transition-all duration-300 transform hover:scale-105"
               >
-                {isConnected ? "Continue to App" : "Skip & Start"}
+                {isConnected ? 'Continue to App' : 'Skip & Start'}
               </button>
             </div>
           ) : (
