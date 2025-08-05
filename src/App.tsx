@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import './index.css';
 
-import type { ChatMessage } from './types';
+import type { ChatMessage } from './types'; // Corrected: type-only import
 import { ConnectionStatus } from './types';
 import { getGameNews, sendMessageWithImage, sendMessage, resetChat } from './services/geminiService';
 import { connect, disconnect } from './services/websocketService';
@@ -279,6 +279,7 @@ const App: React.FC = () => {
 
   if (onboardingStatus === 'initial') return <InitialSplashScreen onComplete={handleInitialSplashComplete} />;
   
+  // CORRECTED: This block now includes all the required props for SplashScreen
   if (onboardingStatus === 'features') {
     return (
         <SplashScreen
@@ -319,14 +320,12 @@ const App: React.FC = () => {
               </button>
           </div>
       </header>
-
       <main className="flex-1 flex flex-col p-4 overflow-y-auto">
         <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto my-4">
           {messages.map(renderMessage)}
           <div ref={chatEndRef} />
         </div>
       </main>
-      
       <footer className="p-4 border-t border-slate-800/60 bg-slate-950/70 backdrop-blur-lg sticky bottom-0 z-10">
         <form onSubmit={handleSendMessage} className="w-full max-w-4xl mx-auto flex items-center gap-3">
           <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" className="hidden"/>
@@ -335,8 +334,8 @@ const App: React.FC = () => {
             onClick={() => fileInputRef.current?.click()}
             aria-label="Upload screenshot"
             className="p-3 flex-shrink-0 rounded-full text-slate-400 hover:bg-slate-800 hover:text-indigo-400 transition-all duration-200 hover:scale-110 active:scale-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-transparent"
-            >
-              <CameraIcon className="w-6 h-6"/>
+          >
+            <CameraIcon className="w-6 h-6"/>
           </button>
           <div className="relative flex-1">
               <input
@@ -352,7 +351,7 @@ const App: React.FC = () => {
                 disabled={!input.trim()}
                 aria-label="Send message"
                 className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 transition-all duration-200 hover:scale-110 active:scale-100 disabled:from-slate-700 disabled:to-slate-700 disabled:text-slate-500 disabled:cursor-not-allowed disabled:hover:scale-100"
-                >
+              >
                 <SendIcon className="w-5 h-5"/>
               </button>
           </div>
