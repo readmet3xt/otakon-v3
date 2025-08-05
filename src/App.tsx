@@ -285,7 +285,6 @@ const App: React.FC = () => {
         <SplashScreen
           onComplete={handleFeaturesSplashComplete}
           onConnect={handleConnect}
-          onDisconnect={handleDisconnect}
           status={connectionStatus}
           error={connectionError}
         />
