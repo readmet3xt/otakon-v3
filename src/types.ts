@@ -1,4 +1,3 @@
-// Use a plain object with 'as const' for full compatibility
 export const ConnectionStatus = {
   DISCONNECTED: 'DISCONNECTED',
   CONNECTING: 'CONNECTING',
@@ -6,10 +5,8 @@ export const ConnectionStatus = {
   ERROR: 'ERROR',
 } as const;
 
-// Create a TypeScript type from the object's values
 export type ConnectionStatus = typeof ConnectionStatus[keyof typeof ConnectionStatus];
 
-// Your other types
 export type ChatMessage = {
   id: string;
   role: 'user' | 'model';
