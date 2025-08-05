@@ -1,42 +1,71 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import './index.css';
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
+import type { ChatMessage } from './types'; // Correct type-only import
+import { ConnectionStatus } from './types';
+import { getGameNews, sendMessageWithImage, sendMessage, resetChat } from './services/geminiService';
+import { connect, disconnect } from './services/websocketService';
+import CameraIcon from './components/CameraIcon';
+import TypingIndicator from './components/TypingIndicator';
+import SendIcon from './components/SendIcon';
+import UserAvatar from './components/UserAvatar';
+import ConnectionModal from './components/ConnectionModal';
+import DesktopIcon from './components/DesktopIcon';
+import SplashScreen from './components/SplashScreen';
+import InitialSplashScreen from './components/InitialSplashScreen';
+import Logo from './components/Logo';
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+// ... (rest of your code from the top of the file remains the same)
+
+const App: React.FC = () => {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [loadingMessages, setLoadingMessages] = useState<string[]>([]);
+  const [input, setInput] = useState<string>('');
+  const [isConnectionModalOpen, setIsConnectionModalOpen] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(ConnectionStatus.DISCONNECTED);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
+  const [onboardingStatus, setOnboardingStatus] = useState<'initial' | 'features' | 'complete'>('initial');
+  const [isCooldownActive, setIsCooldownActive] = useState(false);
+  
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+  const abortControllersRef = useRef<Record<string, AbortController>>({});
+
+  // ... (All of your useEffects and handler functions like handleQuotaError, handleImageUpload, etc. remain here)
+  // ... (The main change is in the JSX return block for the 'features' status)
+
+  const handleInitialSplashComplete = () => setOnboardingStatus('features');
+  const handleFeaturesSplashComplete = () => setOnboardingStatus('complete');
+  
+  // All other handler functions (handleStop, handleImageUpload, handleConnect, etc.)
+  // should remain exactly as you have them. I am omitting them here for brevity.
+  // The only change is the one line in the 'if (onboardingStatus === 'features')' block.
+  
+  if (onboardingStatus === 'initial') {
+    return <InitialSplashScreen onComplete={handleInitialSplashComplete} />;
   }
-  to {
-    transform: rotate(360deg);
+
+  // UPDATED: This block now includes all the required props for SplashScreen
+  if (onboardingStatus === 'features') {
+    return (
+        <SplashScreen
+          onComplete={handleFeaturesSplashComplete}
+          onConnect={handleConnect}
+          onDisconnect={handleDisconnect}
+          status={connectionStatus}
+          error={connectionError}
+        />
+    );
   }
-}
+  
+  // ... (Your main return block with all the JSX for the chat UI remains here)
+  return (
+      <div className="h-screen bg-slate-950 text-white flex flex-col font-inter relative">
+          {/* Your full app JSX */}
+      </div>
+  );
+};
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
+export default App;
